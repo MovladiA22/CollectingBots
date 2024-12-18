@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
@@ -7,6 +8,9 @@ public class Unit : MonoBehaviour
 
     private bool _isLoaded = false;
     private Vector3 _startPosition;
+    private Resource _resource;
+
+    public event Action<Resource> ResourceGaveAway;
 
     public bool IsFree { get; private set; } = true;
 
@@ -18,13 +22,10 @@ public class Unit : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Resource resource) && _isLoaded == false)
-        {
-            _isLoaded = true;
-            resource.Processed += ReturnBack;
+            TakeResource(resource);
 
-            resource.transform.parent = transform;
-            _mover.MoveToTarget(_base.position);
-        }
+        if (other.TryGetComponent<BaseZone>(out BaseZone baseZone) && _isLoaded)
+            GiveAwayResource(_resource);
     }
 
     public void TakeTask(Vector3 targetPosition)
@@ -33,12 +34,21 @@ public class Unit : MonoBehaviour
         _mover.MoveToTarget(targetPosition);
     }
 
-    private void ReturnBack(Resource resource)
+    private void TakeResource(Resource resource)
     {
-        resource.Processed -= ReturnBack;
+        _isLoaded = true;
+        _resource = resource;
+        resource.transform.parent = transform;
+        _mover.MoveToTarget(_base.position);
+    }
 
-        _mover.MoveToTarget(_startPosition);
+    private void GiveAwayResource(Resource resource)
+    {
+        ResourceGaveAway?.Invoke(resource);
+
+        _resource = null;
         _isLoaded = false;
         IsFree = true;
+        _mover.MoveToTarget(_startPosition);
     }
 }

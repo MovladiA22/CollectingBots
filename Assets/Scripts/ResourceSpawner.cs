@@ -35,10 +35,7 @@ public class ResourceSpawner : MonoBehaviour
 
     private Resource CreateObj()
     {
-        var copy = Instantiate(_prefab, _spawnPosition, Quaternion.identity);
-        copy.Processed += ReleaseObj;
-
-        return copy;
+        return Instantiate(_prefab, _spawnPosition, Quaternion.identity);
     }
 
     private void ActivateObj(Resource resource)

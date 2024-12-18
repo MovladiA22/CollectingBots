@@ -11,7 +11,7 @@ public class ResourceScanner : MonoBehaviour
     private bool _isTurnedOn = false;
     private YieldInstruction _wait;
 
-    public event Action<Vector3> ResourceFound;
+    public event Action<Resource> ResourceFound;
 
     private void Awake()
     {
@@ -21,8 +21,7 @@ public class ResourceScanner : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Resource resource))
-            if (resource.Captured == false)
-                ResourceFound?.Invoke(resource.transform.position);
+            ResourceFound?.Invoke(resource);
     }
 
     public void TurnOn()
