@@ -55,7 +55,7 @@ public class ResourceCollector : MonoBehaviour
         if (TryGetFreeUnit(out Unit unit))
         {
             _resources.Remove(resource);
-            unit.TakeTask(resource.transform.position);
+            unit.TakeTask(resource);
         }
     }
 

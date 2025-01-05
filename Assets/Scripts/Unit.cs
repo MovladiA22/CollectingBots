@@ -22,16 +22,17 @@ public class Unit : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Resource resource) && _isLoaded == false)
-            TakeResource(resource);
+            if (resource.transform.parent == null)
+                TakeResource(resource);
 
         if (other.TryGetComponent<BaseZone>(out BaseZone baseZone) && _isLoaded)
             GiveAwayResource(_resource);
     }
 
-    public void TakeTask(Vector3 targetPosition)
+    public void TakeTask(Resource resource)
     {
         IsFree = false;
-        _mover.MoveToTarget(targetPosition);
+        _mover.MoveToTarget(resource.transform.position);
     }
 
     private void TakeResource(Resource resource)

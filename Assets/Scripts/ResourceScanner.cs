@@ -20,7 +20,7 @@ public class ResourceScanner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out Resource resource))
+        if (other.TryGetComponent(out Resource resource) && other.transform.parent == null)
             ResourceFound?.Invoke(resource);
     }
 
