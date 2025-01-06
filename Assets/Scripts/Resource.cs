@@ -5,6 +5,6 @@ public class Resource : MonoBehaviour
 {
     public event Action<Resource> Processed;
 
-    public void InvokeEvent() =>
+    public void InvokeEventProcessed() =>
         Processed?.Invoke(this);
 }

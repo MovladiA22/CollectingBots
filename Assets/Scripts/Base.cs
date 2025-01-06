@@ -6,7 +6,7 @@ public class Base : MonoBehaviour
     [SerializeField] private ResourceScanner _resourceScanner;
     [SerializeField] private ResourceCollector _resourceCollector;
 
-    private int resourcesCount;
+    private int _resourcesCount;
 
     public event Action<string> ResourcesCountChanged;
 
@@ -29,9 +29,9 @@ public class Base : MonoBehaviour
 
     private void ProcessResource(Resource resource)
     {
-        resource.InvokeEvent();
+        resource.InvokeEventProcessed();
 
-        resourcesCount++;
-        ResourcesCountChanged?.Invoke(resourcesCount.ToString());
+        _resourcesCount++;
+        ResourcesCountChanged?.Invoke(_resourcesCount.ToString());
     }
 }

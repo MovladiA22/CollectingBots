@@ -39,7 +39,7 @@ public class ResourceSpawnManager : MonoBehaviour
 
     private IEnumerator SpawnWithDelay(Transform spawnZone)
     {
-        var wait = new WaitForSeconds(Random.Range(_minSpawnDelay, _maxSpawnDelay + 1));
+        var wait = new WaitForSeconds(Random.Range(_minSpawnDelay, _maxSpawnDelay));
 
         yield return wait;
 
