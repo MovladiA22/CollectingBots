@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class ResourceCollector : MonoBehaviour
 {
-    [SerializeField] private Unit[] _collectors;
+    [SerializeField] private List<Unit> _collectors;
 
     private List<Resource> _resources = new List<Resource>();
     private Coroutine _coroutine;
 
     public event Action<Resource> ResourceIsGot;
+
+    public int UnitsCount => _collectors.Count;
 
     private void OnEnable()
     {
@@ -22,6 +24,37 @@ public class ResourceCollector : MonoBehaviour
     {
         foreach (var collector in _collectors)
             collector.ResourceGaveAway -= AcceptResource;
+    }
+
+    public void Init()
+    {
+        foreach (var collector in _collectors)
+            collector.ResourceGaveAway -= AcceptResource;
+
+        _collectors.Clear();
+        _resources.Clear();
+    }
+
+    public void TakeUnit(Unit unit)
+    {
+        _collectors.Add(unit);
+        unit.ResourceGaveAway += AcceptResource;
+    }
+
+    public bool TryGiveAwayUnit(out Unit unit)
+    {
+        unit = null;
+
+        if (_collectors.Count > 1)
+        {
+            unit = _collectors[0];
+            _collectors[0].ResourceGaveAway -= AcceptResource;
+            _collectors.RemoveAt(0);
+
+            return true;
+        }
+
+        return false;
     }
 
     public void AddResourceToList(Resource resource)
@@ -41,10 +74,10 @@ public class ResourceCollector : MonoBehaviour
     {
         float delay = 0.5f;
         var wait = new WaitForSeconds(delay);
-
+        
         while (_resources.Count > 0)
         {
-            PickUpResource(_resources[_resources.Count - 1]);
+            PickUpResource(_resources[0]);
 
             yield return wait;
         }
@@ -55,13 +88,8 @@ public class ResourceCollector : MonoBehaviour
         if (TryGetFreeUnit(out Unit unit))
         {
             _resources.Remove(resource);
-            unit.TakeTask(resource);
+            unit.TakeTask(resource.transform);
         }
-    }
-
-    private void AcceptResource(Resource resource)
-    {
-        ResourceIsGot?.Invoke(resource);
     }
 
     private bool TryGetFreeUnit(out Unit unit)
@@ -78,5 +106,10 @@ public class ResourceCollector : MonoBehaviour
 
         unit = null;
         return false;
+    }
+
+    private void AcceptResource(Resource resource)
+    {
+        ResourceIsGot?.Invoke(resource);
     }
 }

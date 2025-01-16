@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class UnitMover : MonoBehaviour
     private YieldInstruction _wait;
     private Coroutine _coroutine;
 
+    public event Action ReachedToTarget;
+
     private void Awake()
     {
         _wait = new WaitForFixedUpdate();
@@ -15,7 +18,7 @@ public class UnitMover : MonoBehaviour
 
     public void MoveToTarget(Vector3 targetPosition)
     {
-        if (_coroutine != null)
+        if ( _coroutine != null )
             StopCoroutine(_coroutine);
 
         _coroutine = StartCoroutine(Moving(targetPosition));
@@ -30,5 +33,7 @@ public class UnitMover : MonoBehaviour
 
             yield return _wait;
         }
+
+        ReachedToTarget?.Invoke();
     }
 }
