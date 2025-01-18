@@ -6,7 +6,7 @@ public class UnitSpawner : MonoBehaviour
 
     public Unit Create(Transform spawnPosition)
     {
-        var copy = Instantiate(_prefab, spawnPosition.position, Quaternion.identity);
+        Unit copy = Instantiate(_prefab, spawnPosition.position, Quaternion.identity);
         copy.AssighBasePosition(spawnPosition);
 
         return copy;

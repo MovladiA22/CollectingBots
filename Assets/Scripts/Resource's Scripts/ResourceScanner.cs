@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class ResourceScanner : MonoBehaviour
@@ -47,7 +48,7 @@ public class ResourceScanner : MonoBehaviour
         while (_isTurnedOn)
         {
             yield return wait;
-
+            
             Activate();
         }
     }

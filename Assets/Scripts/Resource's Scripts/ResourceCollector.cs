@@ -43,18 +43,21 @@ public class ResourceCollector : MonoBehaviour
 
     public bool TryGiveAwayUnit(out Unit unit)
     {
-        unit = null;
+        unit = _collectors[0];
 
-        if (_collectors.Count > 1)
-        {
-            unit = _collectors[0];
-            _collectors[0].ResourceGaveAway -= AcceptResource;
-            _collectors.RemoveAt(0);
+        if (_collectors.Count <= 1)
+            return false;
 
-            return true;
-        }
+        if (TryGetFreeUnit(out Unit freeUnit))
+            unit = freeUnit;
+        else if (unit.transform.childCount > 0)
+            if (unit.transform.GetChild(0).TryGetComponent(out Resource resource))
+                resource.InvokeEventProcessed();
 
-        return false;
+        unit.ResourceGaveAway -= AcceptResource;
+        _collectors.Remove(unit);
+
+        return true;
     }
 
     public void AddResourceToList(Resource resource)
@@ -74,10 +77,14 @@ public class ResourceCollector : MonoBehaviour
     {
         float delay = 0.5f;
         var wait = new WaitForSeconds(delay);
-        
+
         while (_resources.Count > 0)
         {
-            PickUpResource(_resources[0]);
+            if (_resources[0].IsWaitingForCollector)
+                _resources.RemoveAt(0);
+
+            if (_resources.Count > 0)
+                PickUpResource(_resources[0]);
 
             yield return wait;
         }
@@ -88,6 +95,7 @@ public class ResourceCollector : MonoBehaviour
         if (TryGetFreeUnit(out Unit unit))
         {
             _resources.Remove(resource);
+            resource.MarkAsTargetForCollector();
             unit.TakeTask(resource.transform);
         }
     }

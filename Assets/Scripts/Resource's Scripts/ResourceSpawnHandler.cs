@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class ResourceSpawnManager : MonoBehaviour
+public class ResourceSpawnHandler : MonoBehaviour
 {
-    [SerializeField] private ResourceSpawner _spawner;
+    [SerializeField] private ResourcePool _spawner;
     [SerializeField] private SpawnZone[] _spawnZones;
     [SerializeField] private float _minSpawnDelay;
     [SerializeField] private float _maxSpawnDelay;

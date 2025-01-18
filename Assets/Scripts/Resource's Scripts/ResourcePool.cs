@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ResourceSpawner : MonoBehaviour
+public class ResourcePool : MonoBehaviour
 {
     [SerializeField] private Resource _prefab;
     [SerializeField] private int _poolCapacity;

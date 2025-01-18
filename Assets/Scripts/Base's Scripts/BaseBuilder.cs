@@ -35,7 +35,7 @@ public class BaseBuilder : MonoBehaviour
 
         _buildPosition = new Vector3(_buildPosition.x, _buildPosition.y + baseHeight / halfDivider, _buildPosition.z);
         
-        var resourceBase = Instantiate(_basePrefab, _buildPosition, Quaternion.identity);
+        Base resourceBase = Instantiate(_basePrefab, _buildPosition, Quaternion.identity);
         resourceBase.Init(_unit);
 
         BaseIsBuilt?.Invoke();

@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour
     {
         if (other.TryGetComponent(out Resource resource) && _isLoaded == false)
         {
-            if (resource.IsExtracted == false)
+            if (resource.IsExtracted == false && _target.transform == resource.transform)
                 TakeResource(resource);
         }
         else if (other.TryGetComponent(out BaseZone baseZone) && _isLoaded)
